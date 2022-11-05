@@ -24,6 +24,9 @@
             "dom"
         ],
         "paths": {
+            "@environment": [
+                "src/environments/environment.ts"
+            ],
             "@libs/*": [
                 "libs/*"
             ],
