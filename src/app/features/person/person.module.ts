@@ -6,13 +6,23 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
-import { PersonGeneratorComponent } from './person-generator/person-generator.component';
-import { PersonListComponent } from './person-list/person-list.component';
 import { PersonRoutingModule } from './person-routing.module';
-import { PersonService } from './person.service';
+import { PersonGeneratorComponent, PersonListComponent } from './components';
+import { PersonService } from './services';
+import { PersonPageComponent, PersonHistoryPageComponent } from './pages';
+import { PersonHistoryComponent } from './components/person-history/person-history.component';
+import { MatCardModule } from '@angular/material/card';
+import { PersonGenderPipe } from './pipes/person-gender.pipe';
 
 @NgModule({
-  declarations: [PersonListComponent, PersonGeneratorComponent],
+  declarations: [
+    PersonListComponent,
+    PersonGeneratorComponent,
+    PersonPageComponent,
+    PersonHistoryComponent,
+    PersonHistoryPageComponent,
+    PersonGenderPipe,
+  ],
   imports: [
     CommonModule,
     PersonRoutingModule,
@@ -22,7 +32,9 @@ import { PersonService } from './person.service';
     MatCheckboxModule,
     MatTableModule,
     ReactiveFormsModule,
+    MatCardModule,
   ],
+  exports: [PersonListComponent, PersonGeneratorComponent, PersonPageComponent],
 })
 export class PersonModule {
   static forRoot(): ModuleWithProviders<PersonModule> {
