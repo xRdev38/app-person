@@ -2,13 +2,21 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Spectator } from '@ngneat/spectator';
 import { createComponentFactory } from '@ngneat/spectator/jest';
 import { AppComponent } from './app.component';
+import { CoreModule } from './core';
+import { PersonModule } from './features/person/person.module';
+import { AboutModule } from './features/about/about.module';
 
 describe('AppComponent', () => {
   let spectator: Spectator<AppComponent>;
   const createComponent = createComponentFactory({
     component: AppComponent,
     declarations: [AppComponent],
-    imports: [RouterTestingModule.withRoutes([])],
+    imports: [
+      CoreModule,
+      AboutModule,
+      PersonModule,
+      RouterTestingModule.withRoutes([]),
+    ],
   });
 
   beforeEach(() => {

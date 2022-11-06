@@ -5,7 +5,12 @@ export const routes: Routes = [
   {
     path: 'personnes',
     loadChildren: () =>
-      import('./person/person.module').then(m => m.PersonModule),
+      import('./features/person/person.module').then(m => m.PersonModule),
+  },
+  {
+    path: 'apropos',
+    loadChildren: () =>
+      import('./features/about/about.module').then(m => m.AboutModule),
   },
   {
     path: '',
