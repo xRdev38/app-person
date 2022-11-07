@@ -8,9 +8,8 @@ describe('PersonHistoryPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PersonHistoryPageComponent ]
-    })
-    .compileComponents();
+      declarations: [PersonHistoryPageComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

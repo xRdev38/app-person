@@ -1,11 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { GenerationConfig } from '../../models';
+import { GenerationConfig, Filters } from '../../models';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-person-generator',
@@ -15,10 +16,23 @@ import { GenerationConfig } from '../../models';
 export class PersonGeneratorComponent implements OnInit {
   generatorFormGroup: FormGroup;
 
+  @Input() set columns(value: string[]) {
+    this._filteredStates$.next(this.createFilters(value));
+  }
+
   @Output()
   generateRequest = new EventEmitter<GenerationConfig>();
 
+  @Output()
+  filtersRequest = new EventEmitter<string>();
+
+  private readonly _filteredStates$ = new BehaviorSubject<Filters[]>([]);
+
   constructor(private readonly formBuilder: FormBuilder) {}
+
+  get filteredStates$(): Observable<Filters[]> {
+    return this._filteredStates$.asObservable();
+  }
 
   get count(): FormControl {
     return this.generatorFormGroup.get('count') as FormControl;
@@ -61,6 +75,7 @@ export class PersonGeneratorComponent implements OnInit {
         Validators.max(1000),
         Validators.required,
       ]),
+      filters: new FormControl(null, []),
       gender: this.formBuilder.group({
         male: new FormControl(true),
         female: new FormControl(true),
@@ -74,5 +89,18 @@ export class PersonGeneratorComponent implements OnInit {
     }
     const value: GenerationConfig = this.generatorFormGroup.value;
     this.generateRequest.emit(value);
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.filtersRequest.emit(filterValue);
+  }
+
+  private createFilters(columns: string[]): Filters[] {
+    return columns.map((value: string) => {
+      return {
+        name: value,
+      };
+    });
   }
 }

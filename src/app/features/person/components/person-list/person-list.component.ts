@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { EMPTY, Observable } from 'rxjs';
+import { take } from 'rxjs';
 import { GenerationConfig, Person } from '../../models';
 import { PersonService } from '../../services';
 import { HistoryService } from '../../services/history.service';
 import { HistoryGenerator } from '../../models/history-generator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-person-list',
@@ -18,7 +19,7 @@ export class PersonListComponent {
     'gender',
     'email',
   ];
-  dataSource: Observable<Person[]> = EMPTY;
+  dataSource!: MatTableDataSource<Person>;
 
   constructor(
     private readonly personService: PersonService,
@@ -27,7 +28,16 @@ export class PersonListComponent {
 
   generate(config: GenerationConfig) {
     this.historyService.save(this.mergeData(config));
-    this.dataSource = this.personService.getPersons(config);
+    this.personService
+      .getPersons(config)
+      .pipe(take(1))
+      .subscribe({
+        next: value => (this.dataSource = new MatTableDataSource(value)),
+      });
+  }
+
+  filters(event: string) {
+    this.dataSource.filter = event.trim().toLowerCase();
   }
 
   private mergeData(config: GenerationConfig): HistoryGenerator[] {

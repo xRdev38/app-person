@@ -25,6 +25,8 @@ describe('PersonGeneratorComponent', () => {
 
   beforeEach(() => {
     spectator = createComponent();
+    spectator.component.columns = ['test'];
+    spectator.detectChanges();
   });
 
   test('should create', () => {
@@ -92,6 +94,7 @@ describe('PersonGeneratorComponent', () => {
     expect(emitSpy).toBeCalledWith({
       count: 1000,
       gender: { male: true, female: true },
+      filters: null,
     });
   });
 });

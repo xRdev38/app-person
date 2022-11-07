@@ -48,6 +48,9 @@ const DEFAULT_CONFIG = {
     male: true,
     female: true,
   },
+  filters: {
+    name: '',
+  },
 };
 
 describe('PersonListComponent', () => {

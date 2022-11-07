@@ -13,6 +13,8 @@ import { PersonPageComponent, PersonHistoryPageComponent } from './pages';
 import { PersonHistoryComponent } from './components/person-history/person-history.component';
 import { MatCardModule } from '@angular/material/card';
 import { PersonGenderPipe } from './pipes/person-gender.pipe';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { PersonGenderPipe } from './pipes/person-gender.pipe';
     MatTableModule,
     ReactiveFormsModule,
     MatCardModule,
+    MatAutocompleteModule,
+    MatPaginatorModule,
   ],
   exports: [PersonListComponent, PersonGeneratorComponent, PersonPageComponent],
 })

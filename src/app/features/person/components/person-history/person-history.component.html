@@ -1,9 +1,13 @@
 <ng-container *ngIf="historyGenerator$ | async as historyGenerator">
-    <mat-card class="example-card" *ngFor="let history of historyGenerator; let index = index; trackBy: trackByGenerator">
-        <mat-card-title>Historique {{ index + 1 }}</mat-card-title>
-        <mat-card-subtitle>Date {{ history.createDate | date:"MM/dd/yy" }}</mat-card-subtitle>
-        <mat-card-content>
-            <p>Nombre de personnes générés : <strong>{{ history.count }}</strong></p>
-        </mat-card-content>
-    </mat-card>
+  <mat-card
+    class="example-card"
+    *ngFor="let history of historyGenerator; let index = index; trackBy: trackByGenerator">
+    <mat-card-title>Historique {{ index + 1 }}</mat-card-title>
+    <mat-card-subtitle
+      >Date {{ history.createDate | date:"MM/dd/yy" }}</mat-card-subtitle
+    >
+    <mat-card-content>
+      <p>Nombre de personnes générés : <strong>{{ history.count }}</strong></p>
+    </mat-card-content>
+  </mat-card>
 </ng-container>
