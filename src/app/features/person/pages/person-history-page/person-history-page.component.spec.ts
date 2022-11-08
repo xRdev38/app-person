@@ -5,8 +5,8 @@ import {
   DBConfig,
   NgxIndexedDBModule,
   NgxIndexedDBService,
+  CONFIG_TOKEN,
 } from 'ngx-indexed-db';
-import { CONFIG_TOKEN } from 'ngx-indexed-db/lib/ngx-indexed-db.meta';
 
 const dbConfig: DBConfig = {
   name: 'DbPerson',
@@ -37,7 +37,7 @@ describe('PersonHistoryPageComponent', () => {
       declarations: [PersonHistoryPageComponent],
       providers: [
         NgxIndexedDBService,
-        { provide: CONFIG_TOKEN, useFactory: dbConfig },
+        { provide: CONFIG_TOKEN, useValue: dbConfig },
       ],
     }).compileComponents();
   });

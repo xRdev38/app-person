@@ -17,6 +17,32 @@ import { PersonService } from './person.service';
 import { Person } from '../models';
 import { PersonGeneratorComponent, PersonListComponent } from '../components';
 import { ApiService } from '../../../core';
+import {
+  CONFIG_TOKEN,
+  DBConfig,
+  NgxIndexedDBModule,
+  NgxIndexedDBService,
+} from 'ngx-indexed-db';
+import { of } from 'rxjs';
+
+const dbConfig: DBConfig = {
+  name: 'DbPerson',
+  version: 1,
+  objectStoresMeta: [
+    {
+      store: 'history',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: [
+        { name: 'count', keypath: 'count', options: { unique: false } },
+        {
+          name: 'createDate',
+          keypath: 'createDate',
+          options: { unique: false },
+        },
+      ],
+    },
+  ],
+};
 
 const PERSONS: Person[] = [
   {
@@ -62,7 +88,16 @@ describe('PersonListComponent', () => {
     /* eslint-disable */
     component: PersonListComponent,
     declarations: [PersonListComponent, PersonGeneratorComponent],
-    providers: [ApiService],
+    providers: [
+      {
+        provide: ApiService,
+        useValue: {
+          get: jest.fn().mockReturnValue(of([])),
+        },
+      },
+      NgxIndexedDBService,
+      { provide: CONFIG_TOKEN, useValue: dbConfig },
+    ],
     imports: [
       MatTableModule,
       MatCheckboxModule,
@@ -71,6 +106,7 @@ describe('PersonListComponent', () => {
       ReactiveFormsModule,
       HttpClientTestingModule,
       NoopAnimationsModule,
+      NgxIndexedDBModule,
       RouterTestingModule.withRoutes([]),
     ],
   });

@@ -15,6 +15,31 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  DBConfig,
+  NgxIndexedDBModule,
+  NgxIndexedDBService,
+  CONFIG_TOKEN,
+} from 'ngx-indexed-db';
+
+const dbConfig: DBConfig = {
+  name: 'DbPerson',
+  version: 1,
+  objectStoresMeta: [
+    {
+      store: 'history',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: [
+        { name: 'count', keypath: 'count', options: { unique: false } },
+        {
+          name: 'createDate',
+          keypath: 'createDate',
+          options: { unique: false },
+        },
+      ],
+    },
+  ],
+};
 
 describe('PersonPageComponent', () => {
   let component: PersonPageComponent;
@@ -30,6 +55,7 @@ describe('PersonPageComponent', () => {
         MatCheckboxModule,
         MatInputModule,
         ReactiveFormsModule,
+        NgxIndexedDBModule,
       ],
       declarations: [
         PersonPageComponent,
@@ -38,6 +64,8 @@ describe('PersonPageComponent', () => {
       ],
       providers: [
         ApiService,
+        NgxIndexedDBService,
+        { provide: CONFIG_TOKEN, useValue: dbConfig },
         {
           provide: PersonService,
           useValue: {

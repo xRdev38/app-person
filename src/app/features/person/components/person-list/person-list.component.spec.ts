@@ -17,7 +17,6 @@ import {
   NgxIndexedDBService,
   CONFIG_TOKEN,
 } from 'ngx-indexed-db';
-import { of } from 'rxjs';
 
 const dbConfig: DBConfig = {
   name: 'DbPerson',
@@ -56,10 +55,7 @@ describe('PersonListComponent', () => {
     providers: [
       ApiService,
       PersonService,
-      {
-        provide: NgxIndexedDBService,
-        useValue: jest.fn().mockReturnValue(of([])),
-      },
+      NgxIndexedDBService,
       { provide: CONFIG_TOKEN, useValue: dbConfig },
     ],
   });
