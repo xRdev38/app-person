@@ -1,17 +1,17 @@
-import { Component } from '@angular/core';
-import { take } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { combineLatest, Observable, take, tap } from 'rxjs';
 import { GenerationConfig, Person } from '../../models';
 import { PersonService } from '../../services';
-import { HistoryService } from '../../services/history.service';
-import { HistoryGenerator } from '../../models/history-generator';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxIndexedDBService, WithID } from 'ngx-indexed-db';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-person-list',
   templateUrl: './person-list.component.html',
   styleUrls: ['./person-list.component.scss'],
 })
-export class PersonListComponent {
+export class PersonListComponent implements OnInit {
   displayedColumns: string[] = [
     'id',
     'firstName',
@@ -23,36 +23,69 @@ export class PersonListComponent {
 
   constructor(
     private readonly personService: PersonService,
-    private readonly historyService: HistoryService
+    private readonly historyService: NgxIndexedDBService,
+    private readonly breakpointObserver: BreakpointObserver
   ) {}
 
-  generate(config: GenerationConfig) {
-    this.historyService.save(this.mergeData(config));
-    this.personService
-      .getPersons(config)
-      .pipe(take(1))
-      .subscribe({
-        next: value => (this.dataSource = new MatTableDataSource(value)),
+  ngOnInit(): void {
+    this.breakpointObserver
+      .observe(['(min-width: 978px)'])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.addColumn();
+        } else {
+          this.removeColumn();
+        }
       });
+  }
+
+  generate(config: GenerationConfig) {
+    combineLatest([this.setDb(config), this.getPersons(config)])
+      .pipe(
+        take(1),
+        tap(
+          ([_, persons]: [
+            { count: string; createDate: string } & WithID,
+            Person[]
+          ]) => {
+            this.dataSource = new MatTableDataSource(persons);
+          }
+        )
+      )
+      .subscribe();
   }
 
   filters(event: string) {
     this.dataSource.filter = event.trim().toLowerCase();
   }
 
-  private mergeData(config: GenerationConfig): HistoryGenerator[] {
-    let dataFromLocal = this.historyService.getData('history');
-    if (dataFromLocal === null) {
-      dataFromLocal = [];
+  private addColumn() {
+    if (!this.displayedColumns.includes('id')) {
+      this.displayedColumns.unshift('id');
     }
-    return [
-      ...dataFromLocal,
-      ...[
-        {
-          count: config.count,
-          createDate: new Date(Date.now()),
-        },
-      ],
-    ];
+
+    if (!this.displayedColumns.includes('email')) {
+      this.displayedColumns.push('email');
+    }
+  }
+
+  private removeColumn() {
+    if (!!this.displayedColumns?.length) {
+      this.displayedColumns.shift();
+      this.displayedColumns.pop();
+    }
+  }
+
+  private setDb(
+    config: GenerationConfig
+  ): Observable<{ count: string; createDate: string } & WithID> {
+    return this.historyService.add('history', {
+      count: `${config.count}`,
+      createDate: `${new Date(Date.now()).toString()}`,
+    });
+  }
+
+  private getPersons(config: GenerationConfig): Observable<Person[]> {
+    return this.personService.getPersons(config);
   }
 }

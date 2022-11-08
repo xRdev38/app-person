@@ -16,7 +16,6 @@ h3 {
 }
 
 .count {
-  margin-left: 35px;
   align-self: flex-end;
 }
 
@@ -25,21 +24,35 @@ h3 {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .gender {
   margin: 0 15px;
-  width: 60%;
   display: flex;
-  justify-content: space-around;
+  align-self: flex-end;
+  align-items: center;
+  position: relative;
   &-type {
-    margin: 0 15px;
+    margin: 5px 15px;
   }
 }
 
 .autocomplete-filter {
   margin: 0 15px;
   align-self: flex-end;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+}
+
+.actions {
+  margin-bottom: 15px;
+  align-self: flex-end;
+  position: absolute;
+  right: 35px;
 }
 
 @media only screen and (max-width: 978px) {
@@ -60,11 +73,25 @@ h3 {
   }
 
   .line-item {
+    margin: 0;
     flex-direction: column;
   }
 
   .actions {
     margin: 15px 0;
+    position: inherit;
+    right: auto;
+  }
+
+  .count,
+  .gender,
+  .actions,
+  .autocomplete-filter {
+    align-self: center;
+  }
+
+  .block {
+    align-items: center;
   }
 }
 
@@ -76,6 +103,7 @@ h3 {
     margin-left: 0;
   }
   .line-item {
+    margin: 0;
     width: 100%;
     justify-content: center;
     flex-direction: column;
@@ -85,10 +113,18 @@ h3 {
   }
   .actions {
     margin: 15px 0;
+    position: inherit;
+    right: auto;
   }
 
   .count,
+  .gender,
+  .actions,
   .autocomplete-filter {
     align-self: center;
+  }
+
+  .block {
+    align-items: center;
   }
 }

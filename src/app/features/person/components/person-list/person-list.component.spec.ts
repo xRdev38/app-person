@@ -11,6 +11,32 @@ import { PersonGeneratorComponent } from '../person-generator/person-generator.c
 import { PersonListComponent } from './person-list.component';
 import { ApiService } from '../../../../core';
 import { PersonService } from '../../services';
+import {
+  DBConfig,
+  NgxIndexedDBModule,
+  NgxIndexedDBService,
+  CONFIG_TOKEN,
+} from 'ngx-indexed-db';
+import { of } from 'rxjs';
+
+const dbConfig: DBConfig = {
+  name: 'DbPerson',
+  version: 1,
+  objectStoresMeta: [
+    {
+      store: 'history',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: [
+        { name: 'count', keypath: 'count', options: { unique: false } },
+        {
+          name: 'createDate',
+          keypath: 'createDate',
+          options: { unique: false },
+        },
+      ],
+    },
+  ],
+};
 
 describe('PersonListComponent', () => {
   let spectator: Spectator<PersonListComponent>;
@@ -25,8 +51,17 @@ describe('PersonListComponent', () => {
       ReactiveFormsModule,
       HttpClientTestingModule,
       NoopAnimationsModule,
+      NgxIndexedDBModule,
     ],
-    providers: [ApiService, PersonService],
+    providers: [
+      ApiService,
+      PersonService,
+      {
+        provide: NgxIndexedDBService,
+        useValue: jest.fn().mockReturnValue(of([])),
+      },
+      { provide: CONFIG_TOKEN, useValue: dbConfig },
+    ],
   });
 
   beforeEach(() => {

@@ -4,7 +4,8 @@
     *ngFor="let history of historyGenerator; let index = index; trackBy: trackByGenerator">
     <mat-card-title>Historique {{ index + 1 }}</mat-card-title>
     <mat-card-subtitle
-      >Date {{ history.createDate | date:"MM/dd/yy" }}</mat-card-subtitle
+      >Date {{ history.createDate | date:"MM/dd/yy - HH:mm:ss"
+      }}</mat-card-subtitle
     >
     <mat-card-content>
       <p>Nombre de personnes générés : <strong>{{ history.count }}</strong></p>

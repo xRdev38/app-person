@@ -91,7 +91,7 @@ describe('PersonListComponent', () => {
     spectatorHttp.service.getPersons(DEFAULT_CONFIG).subscribe({
       next: (element: Person[]) => {
         values = [...values, ...element];
-        expect(values.length).toBe(1);
+        expect(values?.length).toBe(1);
       },
       error: () => {},
       complete: () => {

@@ -7,6 +7,26 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { CoreModule } from './core';
+import { DBConfig, NgxIndexedDBModule } from 'ngx-indexed-db';
+
+const dbConfig: DBConfig = {
+  name: 'DbPerson',
+  version: 1,
+  objectStoresMeta: [
+    {
+      store: 'history',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: [
+        { name: 'count', keypath: 'count', options: { unique: false } },
+        {
+          name: 'createDate',
+          keypath: 'createDate',
+          options: { unique: false },
+        },
+      ],
+    },
+  ],
+};
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,6 +37,7 @@ import { CoreModule } from './core';
     AppRoutingModule,
     MatButtonModule,
     CoreModule,
+    NgxIndexedDBModule.forRoot(dbConfig),
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HistoryService } from '../../services/history.service';
 import { HistoryGenerator } from '../../models/history-generator';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-person-history-page',
@@ -8,11 +9,11 @@ import { HistoryGenerator } from '../../models/history-generator';
   styleUrls: ['./person-history-page.component.scss'],
 })
 export class PersonHistoryPageComponent implements OnInit {
-  historyList: HistoryGenerator[];
+  historyList$: Observable<HistoryGenerator[]>;
 
-  constructor(private readonly historyService: HistoryService) {}
+  constructor(private readonly historyService: NgxIndexedDBService) {}
 
   ngOnInit(): void {
-    this.historyList = this.historyService.getData('history');
+    this.historyList$ = this.historyService.getAll('history');
   }
 }

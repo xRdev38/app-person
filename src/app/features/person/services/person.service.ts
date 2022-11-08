@@ -19,12 +19,12 @@ export class PersonService {
 
   private filterData(config: GenerationConfig, persons: Person[]): Person[] {
     return persons
-      .splice(0, config.count)
       .filter(
         person =>
           (config.gender.female &&
             person.gender.toLocaleLowerCase() === 'female') ||
           (config.gender.male && person.gender.toLocaleLowerCase() === 'male')
-      );
+      )
+      .splice(0, config.count);
   }
 }

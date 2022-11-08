@@ -1,5 +1,6 @@
 :host {
   display: block;
+  position: relative;
   width: 100%;
 }
 
@@ -14,7 +15,7 @@
 
 .title {
   position: absolute;
-  top: 80px;
+  top: 40px;
   width: 100%;
   text-align: center;
   opacity: 1;

@@ -7,39 +7,41 @@
         de personnes à générer <br />
         ainsi que le choix du genre.
       </p>
+      <mat-form-field class="count">
+        <input
+          matInput
+          type="number"
+          placeholder="Nombre"
+          formControlName="count" />
+        <mat-error *ngIf="count.invalid"
+          >Erreur : le nombre pour la génération doit être compris entre 1 et
+          1000 et non vide</mat-error
+        >
+      </mat-form-field>
     </div>
-    <mat-form-field class="count">
-      <input
-        matInput
-        type="number"
-        placeholder="Nombre"
-        formControlName="count" />
-      <mat-error *ngIf="count.invalid"
-        >Erreur : le nombre pour la génération doit être compris entre 1 et 1000
-        et non vide</mat-error
-      >
-    </mat-form-field>
     <mat-form-field class="autocomplete-filter" appearance="standard">
       <mat-label>Filter</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Name" />
     </mat-form-field>
-  </div>
 
-  <div class="line-item">
     <div class="gender" [formGroup]="gender">
-      <mat-checkbox class="gender-type" formControlName="male"
-        >Homme</mat-checkbox
-      >
-      <mat-checkbox class="gender-type" formControlName="female"
-        >Femme</mat-checkbox
-      >
-      <mat-error *ngIf="gender.invalid"
-        >Erreur : le genre doit être selectionné</mat-error
-      >
+      <div class="block">
+        <mat-checkbox class="gender-type" formControlName="male"
+          >Homme</mat-checkbox
+        >
+        <mat-checkbox class="gender-type" formControlName="female"
+          >Femme</mat-checkbox
+        >
+        <mat-error class="error" *ngIf="gender.invalid"
+          >Erreur : le genre doit être selectionné</mat-error
+        >
+      </div>
     </div>
+
     <div class="actions">
       <button
         mat-raised-button
+        color="primary"
         type="submit"
         [disabled]="generatorFormGroup.invalid">
         Générer
