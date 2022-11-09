@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { combineLatest, Observable, take, tap } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { combineLatest, Observable, Subscription, take, tap } from 'rxjs';
 import { GenerationConfig, Person } from '../../models';
 import { PersonService } from '../../services';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,7 +11,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
   templateUrl: './person-list.component.html',
   styleUrls: ['./person-list.component.scss'],
 })
-export class PersonListComponent implements OnInit {
+export class PersonListComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     'id',
     'firstName',
@@ -20,6 +20,7 @@ export class PersonListComponent implements OnInit {
     'email',
   ];
   dataSource!: MatTableDataSource<Person>;
+  subscriptions: Subscription[] = [];
 
   constructor(
     private readonly personService: PersonService,
@@ -28,15 +29,17 @@ export class PersonListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.breakpointObserver
-      .observe(['(min-width: 978px)'])
-      .subscribe((state: BreakpointState) => {
-        if (state.matches) {
-          this.addColumn();
-        } else {
-          this.removeColumn();
-        }
-      });
+    this.subscriptions.push(
+      this.breakpointObserver
+        .observe(['(min-width: 978px)'])
+        .subscribe((state: BreakpointState) => {
+          if (state.matches) {
+            this.addColumn();
+          } else {
+            this.removeColumn();
+          }
+        })
+    );
   }
 
   generate(config: GenerationConfig) {
@@ -87,5 +90,11 @@ export class PersonListComponent implements OnInit {
 
   private getPersons(config: GenerationConfig): Observable<Person[]> {
     return this.personService.getPersons(config);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription: Subscription) =>
+      subscription.unsubscribe()
+    );
   }
 }
